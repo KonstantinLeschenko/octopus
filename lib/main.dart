@@ -26,6 +26,8 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+
+
   int octopusPosition = 0;
   int scores = 0;
 
