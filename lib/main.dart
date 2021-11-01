@@ -38,23 +38,37 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    double mWidth = MediaQuery.of(context).size.width;
+    double mHeight = MediaQuery.of(context).size.height;
+
+
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Colors.grey[900],
       body: Column(
         children: [
-          Column(
-            children: [
-              const Text('Octopus  Game',
-                  style: TextStyle(
-                    fontSize: 60,
-                  )),
-              Text('Scores : $scores',
-                  style: const TextStyle(
-                    fontSize: 60,
-                  )),
-            ],
+          SizedBox(
+            width: mWidth,
+            height: (mHeight - (mWidth + mWidth/10*2))/2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: [
+                const Text('Octopus  Game',
+                    style: TextStyle(
+                      fontSize: 24, color: Colors.white
+                    )),
+                Text('Scores : $scores',
+                    style: const TextStyle(
+                      fontSize: 24, color: Colors.white
+                    )),
+              ],
+            ),
           ),
-          Expanded(
+          SizedBox(
+            width: mWidth,
+            height: mWidth + mWidth/10*2,
             child: GestureDetector(
                 onVerticalDragUpdate: (details) {
                   if (direction != 'up' && details.delta.dy > 0) {
@@ -116,21 +130,23 @@ class _GameScreenState extends State<GameScreen> {
                   },
                 )),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextButton(
-                  onPressed: startGame,
-                  child: const Text(
-                    'START',
-                    style: TextStyle(fontSize: 30),
-                  )),
-              const SizedBox(
-                height: 50,
-                child: Text(''),
-              )
-            ],
+          SizedBox(
+            width: mWidth,
+            height: (mHeight - (mWidth + mWidth/10*2))/2,
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: startGame,
+                    child: const Text(
+                      'START',
+                      style: TextStyle(fontSize: 30),
+                    )),
+
+              ],
+            ),
           ),
         ],
       ),
