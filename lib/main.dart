@@ -26,22 +26,19 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-
-
   int octopusPosition = 0;
   int scores = 0;
 
   int food = Random().nextInt(119);
   int foodType = Random().nextInt(3);
+  bool isRunning = false;
 
   List<int> fence = [3, 27, 42, 46, 50, 69, 74, 101, 108, 115];
 
   @override
   Widget build(BuildContext context) {
-
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
-
 
     return Scaffold(
       backgroundColor: Colors.grey[900],
@@ -49,26 +46,21 @@ class _GameScreenState extends State<GameScreen> {
         children: [
           SizedBox(
             width: mWidth,
-            height: (mHeight - (mWidth + mWidth/10*2))/2,
+            height: (mHeight - mWidth * 1.2) / 2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-
               children: [
                 const Text('Octopus  Game',
-                    style: TextStyle(
-                      fontSize: 24, color: Colors.white
-                    )),
+                    style: TextStyle(fontSize: 24, color: Colors.white)),
                 Text('Scores : $scores',
-                    style: const TextStyle(
-                      fontSize: 24, color: Colors.white
-                    )),
+                    style: const TextStyle(fontSize: 24, color: Colors.white)),
               ],
             ),
           ),
           SizedBox(
             width: mWidth,
-            height: mWidth + mWidth/10*2,
+            height: mWidth * 1.2,
             child: GestureDetector(
                 onVerticalDragUpdate: (details) {
                   if (direction != 'up' && details.delta.dy > 0) {
@@ -93,7 +85,8 @@ class _GameScreenState extends State<GameScreen> {
                     if (octopusPosition == index) {
                       return MySquare(
                         color: Colors.green[300],
-                        child: Image.asset('assets/octopus.png'),);
+                        child: Image.asset('assets/octopus.png'),
+                      );
                     } else if (fence.contains(index)) {
                       return MySquare(
                         color: Colors.green[300],
@@ -132,8 +125,7 @@ class _GameScreenState extends State<GameScreen> {
           ),
           SizedBox(
             width: mWidth,
-            height: (mHeight - (mWidth + mWidth/10*2))/2,
-
+            height: (mHeight - mWidth * 1.2) / 2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -144,7 +136,6 @@ class _GameScreenState extends State<GameScreen> {
                       'START',
                       style: TextStyle(fontSize: 30),
                     )),
-
               ],
             ),
           ),
@@ -154,23 +145,27 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void startGame() {
-    scores = 0;
-    octopusPosition = 0;
-    direction = 'down';
+    if (!isRunning) {
+      isRunning = true;
+      scores = 0;
+      octopusPosition = 0;
+      direction = 'down';
 
-    const duration = Duration(milliseconds: 400);
-    Timer.periodic(duration, (Timer timer) {
-      updateOctopus();
-      if (octopusPosition == food) {
-        scores += 1;
-        generateFood();
-      }
-      if (gameOver()) {
-        timer.cancel();
-        _showGameOverScreen();
-        //print('GameOver');
-      }
-    });
+      const duration = Duration(milliseconds: 400);
+      Timer.periodic(duration, (Timer timer) {
+        updateOctopus();
+        if (octopusPosition == food) {
+          scores += 1;
+          generateFood();
+        }
+        if (gameOver()) {
+          isRunning = false;
+          timer.cancel();
+          _showGameOverScreen();
+          //print('GameOver');
+        }
+      });
+    }
   }
 
   var direction = 'down';
